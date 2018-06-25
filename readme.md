@@ -1,11 +1,11 @@
-# Add anomaly detection rule to rule engine 
+# Add anomaly detection Rule
 
-This is an ARTIK cloud services api call sample which creates an anomaly rule into your account.   
+This is an ARTIK cloud services sample that creates a [machine learning Rule](https://developer.artik.cloud/documentation/rules-engine.html#apply-machine-learning) with an anomaly detection condition.
 
 This sample will demonstrate the following:
 
-* Making an api call to the Rule Engine service endpoint:  `/rules`
-* Payload required to create a Rule  
+* Making an API call to the Rules service endpoint: `/rules`
+* Payload required to create a Rule 
 
 **Prerequisites**
 
@@ -25,13 +25,13 @@ v5.8.1
 
 ### Setup / Installation
 
-1. [Create a new device type](https://github.com/artikcloud/sample-json-DeviceTypeManifestsForImport) for this sample (or skip this step if you wish to use an existing device already in your account).  If you wish to create a new device type:  upload the `sample-manifest-smart-lock.json` file to create your manifest.
-2. Add a device (of above device type) into your account (or use an existing device already in your account).   Browse your devices and obtain the **device Id* for the device.
-3. Log into your application to obtain your **user token** for the application.   If you have not yet created an application, instructions for our oauth2 [Authorization flow is here](https://developer.artik.cloud/documentation/user-management/authentication.html).    Using the user token, you can obtain your **user Id** by calling the `/users/self` api call.  
+1. [Create a new device type](https://github.com/artikcloud/sample-json-DeviceTypeManifestsForImport) for this sample (or skip this step if you wish to use an existing device already in your account).  If you wish to create a new device type:  upload the `sample-manifest-smart-lock.json` file to create your Manifest.
+2. Add a device (of above device type) into your account (or use an existing device already in your account). Browse your devices and obtain the **device ID** for the device.
+3. Log into your application to obtain your **user token** for the application. If you have not yet created an application, instructions for our OAuth2 [Authorization flow is here](https://developer.artik.cloud/documentation/user-management/authentication.html). Using the user token, you can obtain your **user ID** by calling the `/users/self` API call.  
 
 ### **Code setup**
 
-1. Open the sample nodejs script `create-anomaly-rule.js` and fill in the information:
+1. Open the sample Node.js script `create-anomaly-rule.js` and fill in the information:
 
 ```
 var your_user_id = 'your_user_id_here';
@@ -39,9 +39,9 @@ var your_user_token = 'your_user_token_here';
 var your_device_id = 'your_device_id_here';
 ```
 
-2. This sample will monitor the "state" field from your device.   If you wish to monitor a different field, replace the "state" value to another field you want to monitor.
+2. This sample will monitor the `state` field from your device.   If you wish to monitor a different field, replace the "state" value with another field you want to monitor.
 
-Additionally, we set the transformer definition for anomaly detection.   The rule defintion below trggers if anomaly is true.
+Additionally, we set the Rule transformer to an "anomalyDetection" type condition. (See the possible types of [machine learning conditions](https://developer.artik.cloud/documentation/rules-engine.html#apply-machine-learning).) The below Rule trggers if an anomaly is detected (at medium sensitivity).
 
 ```
 rule_body.rule.if = {
@@ -56,7 +56,7 @@ rule_body.rule.if = {
    //...
 ```
 
-3. In this sample, if an anomaly is detected, this will trigger the "setOn" action to the device.  If you wish to trigger a different action on the device, replace the "setOn" action to a different value:
+3. In this sample, if the predicted value matches the condition you specified, this will trigger the `setOn` Action on the device. If you wish to trigger a different Action on the device, replace the "setOn" Action with a different value.
 
 ```
 rule_body.rule.then = [{
@@ -65,7 +65,7 @@ rule_body.rule.then = [{
   //...
 ```
 
-4. We will also create this rule so that it is only accessible by this application you have signed into:
+4. We will also make this Rule accessible only by the application associated with your user token:
 
 ```
 "rule": {
@@ -83,7 +83,7 @@ rule_body.rule.then = [{
 
 ###1. Run sample  
 
-Run the script via command line
+Run the script via command line:
 
 ```
 %> node create-anomaly-rule.js
@@ -135,23 +135,23 @@ Here is the successful response data:
 }
 ```
 
-Rule is now active and will trigger the action specified when an anomaly is detected on any incomding data to the device.
+The Rule is now active and will trigger the Action specified when an anomaly is detected on any incomding data to the device.
 
 ### 2. View this Rule in your account   
 
-You can verify the rule is added to the account by visiting the [Rule Engine dashboard](https://my.artik.cloud).    Click on the checkmark for ("*show private rules* …") to view any additional rules that are only accessible by the application.
+You can verify the Rule is added to your account by visiting the [Rules dashboard](https://my.artik.cloud/rules). Check ("*show private rules* …") to view any additional Rules that are only accessible by the application.
 
 ![screenshot](./screenshots/screenshot1.png)
 
 ### 3. (optional) Send data to the device  
 
-This sample only demontrates creating the Rule into your account.
+This sample only demontrates creating the Rule in your account.
 
-Test the anomaly detection by sending a message to the device.   If the system detects the received value an anomaly it will trigger the action you specified.  
+Test the anomaly detection by sending a message to the device. If the system detects an anomaly in the received value, it will trigger the Action you specified.  
 
 Here are a few options to send a message:
 
-1. Send message to device using the Web Simulator (https://my.artik.cloud -> web device simulator)
+1. Send message to device using the Device Simulator (https://my.artik.cloud/devices -> Show Simulator)
 2. Send message to device using API Console (https://developer.artik.cloud/api-console)
 3. Send message to device using any of our other [Code Samples](https://developer.artik.cloud/documentation/tutorials/code-samples/)
 
@@ -159,7 +159,7 @@ Here are a few options to send a message:
 
 ## Final notes:
 
-1. The rule engine will only allow 10 rules per user per application.   Attempting to create more will result in the following error:
+1. The Rule engine allows 10 Rules per user per application. Attempting to create more will result in the following error:
 
    ```
    "errors": [{
@@ -177,7 +177,7 @@ If you are not familiar with ARTIK cloud services, we have extensive documentati
 
 The full ARTIK cloud services API specification can be found at https://developer.artik.cloud/documentation/api-reference/
 
-Peek into advanced sample applications at https://developer.artik.cloud/documentation/tutorials/code-samples/
+Check out advanced sample applications at https://developer.artik.cloud/documentation/tutorials/code-samples/
 
 To create and manage your services and devices on ARTIK cloud services, visit the Developer Dashboard at https://developer.artik.cloud
 
